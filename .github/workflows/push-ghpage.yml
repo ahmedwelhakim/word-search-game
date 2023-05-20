@@ -21,11 +21,13 @@ jobs:
           npm run build
         working-directory: ./
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.1
+      - name: Angular Deploy gh-pages Actions
+        uses: AhsanAyaz/angular-deploy-gh-pages-actions@v1.4.0
         with:
-          branch: gh-pages
-          folder: ./dist
-          clean: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          base_href: /word-search-game/
+          deploy_branch: gh-pages
+          angular_dist_build_folder: dist/word-matcher
+
+permissions:
+  contents: write
