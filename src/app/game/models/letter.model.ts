@@ -39,6 +39,8 @@ export class Letter {
     if (wordColor) this.wordColor = wordColor;
   }
   draw(ctx: CanvasRenderingContext2D) {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
     ctx.fillStyle = this.boxColor;
     ctx.fillRect(this._point.x, this._point.y, this._width, this.height);
     ctx.strokeStyle = this.wordColor;

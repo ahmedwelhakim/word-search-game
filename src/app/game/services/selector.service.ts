@@ -40,7 +40,7 @@ export class SelectorService implements OnDestroy {
     }
     this.ctx.beginPath();
     this.ctx.moveTo(this.startPoint.x, this.startPoint.y);
-
+    this.ctx.lineWidth = 3;
     this.ctx.lineTo(this.endPoint.x, this.endPoint.y);
     this.ctx.fillStyle = 'red';
     this.ctx.fill();
