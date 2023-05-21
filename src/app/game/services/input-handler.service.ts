@@ -88,13 +88,27 @@ export class InputHandlerService implements OnDestroy {
   }
   private getQuantizedPoint(point: Point): Point {
     const boxSize = this.boardService.boxSize;
-    const offsetX = boxSize / 2;
-    const offsetY = boxSize / 2;
-    let x = Math.floor(point.x / boxSize) * boxSize + offsetX;
-    let y = Math.floor(point.y / boxSize) * boxSize + offsetY;
+    const halfBoxoffsetX = boxSize / 2;
+    const halfBoxOffsetY = boxSize / 2;
+
+    // *****************************************************************
+    // translate points to Board Table to top left
+    let x = point.x - this.boardService.offsetX;
+    let y = point.y - this.boardService.offsetY;
+
+    x = Math.floor(x / boxSize) * boxSize + halfBoxoffsetX;
+    y = Math.floor(y / boxSize) * boxSize + halfBoxOffsetY;
+
+    // ****************************************************************
+    // translate points back to their original
+    x += this.boardService.offsetX;
+    y += this.boardService.offsetY;
+
     return Point.from(x, y);
   }
-  private moveWhilePressDown(whileMove: (event: MouseEvent) => void) {
+  private moveWhilePressDown(
+    whileMove: (event: MouseEvent | TouchEvent) => void
+  ) {
     let unlistenMouseUpFn: () => void;
     let unlistenMouseMoveFn: () => void;
     let unlistenTouchMoveFn: () => void;
@@ -115,7 +129,7 @@ export class InputHandlerService implements OnDestroy {
       'mousedown',
       (event) => {
         event.stopPropagation();
-
+        event.preventDefault();
         // First click is handled here
         let point = this.getPointFromEvent(event);
         point = this.getQuantizedPoint(point);
@@ -136,6 +150,7 @@ export class InputHandlerService implements OnDestroy {
       'touchstart',
       (event) => {
         event.stopPropagation();
+        event.preventDefault();
         // First click is handled here
         const point = this.getPointFromEvent(event);
         this._startPoint$.next(point);

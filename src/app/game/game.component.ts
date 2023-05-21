@@ -59,10 +59,6 @@ export class GameComponent implements AfterViewInit, OnDestroy {
       }
     });
     this.subscriptions.add(sub1);
-    const sub2 = this.gameService.selectedWord$.subscribe((word) => {
-      console.log(word);
-    });
-    this.subscriptions.add(sub2);
   }
 
   draw() {
@@ -80,7 +76,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
   @HostListener('window:resize')
   onResize() {
     this.updateBoardSize();
-    this.boardService.updateSizes();
+    this.boardService.updateLettersAndSizes();
     this.draw();
   }
 

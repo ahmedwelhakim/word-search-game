@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { GameService } from './game/services/game.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'word-matcher';
+
+  constructor(protected gameService: GameService) {}
 }

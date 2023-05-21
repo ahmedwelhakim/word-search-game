@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Point } from '../models/point.model';
+import { BoardService } from './board.service';
 import { CanvasService } from './canvas.service';
 import { InputHandlerService } from './input-handler.service';
 
@@ -16,10 +17,10 @@ export class SelectorService implements OnDestroy {
 
   constructor(
     private canvasService: CanvasService,
-    private inputHandler: InputHandlerService
+    private inputHandler: InputHandlerService,
+    private boardService: BoardService
   ) {
     this.ctx = this.canvasService.ctx;
-    console.log(this.ctx.font);
     const sub1 = this.inputHandler.startEndPoints$.subscribe(
       ([startPoint, endPoint]) => {
         this.startPoint = startPoint;
@@ -34,6 +35,9 @@ export class SelectorService implements OnDestroy {
   }
 
   draw() {
+    if (!this.boardService.isInBoard(this.startPoint, this.endPoint)) {
+      return;
+    }
     this.ctx.beginPath();
     this.ctx.moveTo(this.startPoint.x, this.startPoint.y);
 

@@ -14,16 +14,17 @@ export class GameService implements OnDestroy {
     private inputHandler: InputHandlerService,
     private boardService: BoardService
   ) {
+    this.boardService.fillBoard(10, 10, 'بحر', 'كتاب');
     this.subscriptions.add(
       this.inputHandler.startEndPoints$.subscribe(([startPoint, endPoint]) => {
-        this._selectedWord.next(
-          this.boardService.getWord(startPoint, endPoint)
-        );
+        const selectedWord = this.boardService.getWord(startPoint, endPoint);
+        if (selectedWord) {
+          this._selectedWord.next(selectedWord);
+        }
       })
     );
   }
   ngOnDestroy(): void {
-    console.log('Board Service Destroyed');
     this.subscriptions.unsubscribe();
   }
   get selectedWord$() {

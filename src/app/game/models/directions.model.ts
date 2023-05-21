@@ -84,4 +84,20 @@ export class Direction {
     // It should never reach here
     throw new Error('Invalid angle');
   }
+  static get directions() {
+    return [
+      Direction.E,
+      Direction.W,
+      Direction.S,
+      Direction.NE,
+      Direction.NW,
+      Direction.SW,
+      Direction.SE,
+    ];
+  }
+  static get randomDirection() {
+    return Direction.directions[
+      Math.floor(Math.random() * Direction.directions.length)
+    ];
+  }
 }
