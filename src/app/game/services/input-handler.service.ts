@@ -152,7 +152,8 @@ export class InputHandlerService implements OnDestroy {
         event.stopPropagation();
         event.preventDefault();
         // First click is handled here
-        const point = this.getPointFromEvent(event);
+        let point = this.getPointFromEvent(event);
+        point = this.getQuantizedPoint(point);
         this._startPoint$.next(point);
         this._pressed$.next(true);
 
