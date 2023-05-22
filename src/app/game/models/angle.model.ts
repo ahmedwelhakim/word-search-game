@@ -1,3 +1,5 @@
+import { Point } from './point.model';
+
 export class Angle {
   private radAngle;
   constructor(radAngle: number) {
@@ -9,7 +11,7 @@ export class Angle {
   }
 
   get degreeAngle() {
-    return Angle.radToDeg(this.radianAngle);
+    return Math.round(Angle.radToDeg(this.radianAngle));
   }
 
   valueOf() {
@@ -37,7 +39,11 @@ export class Angle {
   static fromRad(radAngle: number) {
     return new Angle(radAngle);
   }
-
+  static angle(p1: Point, p2: Point) {
+    let angle = Angle.atan2(p2.y - p1.y, p2.x - p1.x);
+    if (angle.degreeAngle < 0) angle = angle.addDeg(360);
+    return angle;
+  }
   static cos(angle: Angle) {
     return Math.cos(angle.radianAngle);
   }

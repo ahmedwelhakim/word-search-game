@@ -1,5 +1,3 @@
-import { Angle } from './angle.model';
-
 export class Point {
   private constructor(private _x: number, private _y: number) {}
 
@@ -23,11 +21,6 @@ export class Point {
     return (p2.y - p1.y) / (p2.x - p1.x);
   }
 
-  static angle(p1: Point, p2: Point) {
-    let angle = Angle.atan2(p2.y - p1.y, p2.x - p1.x);
-    if (angle.degreeAngle < 0) angle = angle.addDeg(360);
-    return angle;
-  }
   static from(x: number, y: number) {
     return new Point(x, y);
   }

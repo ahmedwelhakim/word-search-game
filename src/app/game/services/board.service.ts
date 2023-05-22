@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Angle } from '../models/angle.model';
 import { Direction } from '../models/directions.model';
 import { Letter } from '../models/letter.model';
 import { Point } from '../models/point.model';
@@ -179,7 +180,7 @@ export class BoardService {
     const [i2, j2] = this.translatePointToIndices(endPoint);
 
     const direction = Direction.calcSnappedAngle(
-      Point.angle(startPoint, endPoint)
+      Angle.angle(startPoint, endPoint)
     );
     let res: string[] = [];
     const distanceLength = Math.max(Math.abs(i2 - i1), Math.abs(j2 - j1)) + 1;

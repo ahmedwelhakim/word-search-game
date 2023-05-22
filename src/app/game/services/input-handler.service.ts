@@ -51,13 +51,20 @@ export class InputHandlerService implements OnDestroy {
       .pipe(map((point): [Point, Point] => [this._startPoint$.value, point]));
   }
 
+  get direction$() {
+    return this.startEndPoints$.pipe(
+      map(([startPoint, endPoint]) =>
+        Direction.calcSnappedAngle(Angle.angle(startPoint, endPoint))
+      )
+    );
+  }
   get pressed$() {
     return this._pressed$.asObservable();
   }
   private getSnappedPoint(endPoint: Point): Point {
     let newX = endPoint.x;
     let newY = endPoint.y;
-    let angle = Point.angle(this._startPoint$.value, endPoint);
+    let angle = Angle.angle(this._startPoint$.value, endPoint);
     const snappedAngle = Direction.calcSnappedAngle(angle);
 
     // Horizontal Line
