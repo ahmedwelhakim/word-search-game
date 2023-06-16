@@ -1,9 +1,17 @@
 import { Point } from './point.model';
 
 export class Angle {
-  private radAngle;
+  private readonly radAngle: number;
   constructor(radAngle: number) {
     this.radAngle = radAngle;
+  }
+
+  static fromDeg(degAngle: number) {
+    return new Angle(Angle.degToRad(degAngle));
+  }
+
+  static fromRad(radAngle: number) {
+    return new Angle(radAngle);
   }
 
   get radianAngle() {
@@ -21,10 +29,10 @@ export class Angle {
     return `deg: ${this.degreeAngle}°, rad: ${this.radianAngle}rad`;
   }
   addDeg(degAngle: number) {
-    return new Angle(this.radianAngle + Angle.degToRad(degAngle));
+    return  Angle.fromRad(this.radianAngle + Angle.degToRad(degAngle))
   }
   addRad(radAngle: number) {
-    return new Angle(this.radianAngle + radAngle);
+    return Angle.fromRad(this.radianAngle + radAngle)
   }
 
   static degToRad(degAngle: number) {
@@ -32,12 +40,6 @@ export class Angle {
   }
   static radToDeg(radAngle: number) {
     return (radAngle * 180) / Math.PI;
-  }
-  static fromDeg(degAngle: number) {
-    return new Angle(Angle.degToRad(degAngle));
-  }
-  static fromRad(radAngle: number) {
-    return new Angle(radAngle);
   }
   static angle(p1: Point, p2: Point) {
     let angle = Angle.atan2(p2.y - p1.y, p2.x - p1.x);

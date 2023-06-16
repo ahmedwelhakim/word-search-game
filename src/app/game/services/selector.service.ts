@@ -5,9 +5,7 @@ import { BoardService } from './board.service';
 import { CanvasService } from './canvas.service';
 import { InputHandlerService } from './input-handler.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SelectorService implements OnDestroy {
   private ctx: CanvasRenderingContext2D;
   private startPoint = Point.from(0, 0);

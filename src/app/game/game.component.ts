@@ -20,6 +20,7 @@ import { SelectorService } from './services/selector.service';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [GameService,BoardService, CanvasService, InputHandlerService, SelectorService],
 })
 export class GameComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvasContainer', { static: true })
@@ -37,7 +38,7 @@ export class GameComponent implements AfterViewInit, OnDestroy {
     private inputHandlerService: InputHandlerService,
     private selectorService: SelectorService,
     private boardService: BoardService,
-    private gameService: GameService
+    protected gameService: GameService
   ) {}
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();

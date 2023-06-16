@@ -1,1 +1,9 @@
-<div #canvasContainer class="canvas-container"></div>
+<div class="container">
+  <div class="game-container">
+    <div #canvasContainer class="canvas-container"></div>
+
+  </div>
+  <div class="selected-word">
+    <p>{{gameService.selectedWord$ | async}} </p>
+  </div>
+</div>

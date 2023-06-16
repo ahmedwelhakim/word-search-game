@@ -34,8 +34,8 @@ export class Letter {
     if (wordColor) this.wordColor = wordColor;
     if (boxColor) this.boxColor = boxColor;
   }
-  updateColors(boxXolor: string, wordColor?: string) {
-    this.boxColor = boxXolor;
+  updateColors(boxColor: string, wordColor?: string) {
+    this.boxColor = boxColor;
     if (wordColor) this.wordColor = wordColor;
   }
   draw(ctx: CanvasRenderingContext2D) {

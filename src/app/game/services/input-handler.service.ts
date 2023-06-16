@@ -11,15 +11,13 @@ import { Point } from '../models/point.model';
 import { BoardService } from './board.service';
 import { CanvasService } from './canvas.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class InputHandlerService implements OnDestroy {
-  private canvas: HTMLCanvasElement;
+  private readonly canvas: HTMLCanvasElement;
   private _startPoint$ = new BehaviorSubject<Point>(Point.from(-1, -1));
   private _endPoint$ = new BehaviorSubject<Point>(Point.from(-1, -1));
   private _pressed$ = new BehaviorSubject<boolean>(false);
-  private unlisitners: (() => void)[] = [];
+  private readonly unlisitners: (() => void)[] = [];
   private renderer: Renderer2;
   constructor(
     private canvasService: CanvasService,
@@ -54,7 +52,7 @@ export class InputHandlerService implements OnDestroy {
   get direction$() {
     return this.startEndPoints$.pipe(
       map(([startPoint, endPoint]) =>
-        Direction.calcSnappedAngle(Angle.angle(startPoint, endPoint))
+        Direction.getDirection(startPoint, endPoint)
       )
     );
   }
@@ -69,12 +67,12 @@ export class InputHandlerService implements OnDestroy {
 
     // Horizontal Line
     if (snappedAngle === Direction.E || snappedAngle === Direction.W) {
-      newY = this._startPoint$.value.y + 1; // This 1 as for some unknown reason it does not draw anything when both equal
+      newY = this._startPoint$.value.y ;
     }
 
     // Vertical Line
     else if (snappedAngle == Direction.N || snappedAngle == Direction.S) {
-      newX = this._startPoint$.value.x + 1;
+      newX = this._startPoint$.value.x ;
     }
     // 45 degree line
     else {
@@ -95,7 +93,7 @@ export class InputHandlerService implements OnDestroy {
   }
   private getQuantizedPoint(point: Point): Point {
     const boxSize = this.boardService.boxSize;
-    const halfBoxoffsetX = boxSize / 2;
+    const halfBoxOffsetX = boxSize / 2;
     const halfBoxOffsetY = boxSize / 2;
 
     // *****************************************************************
@@ -103,7 +101,7 @@ export class InputHandlerService implements OnDestroy {
     let x = point.x - this.boardService.offsetX;
     let y = point.y - this.boardService.offsetY;
 
-    x = Math.floor(x / boxSize) * boxSize + halfBoxoffsetX;
+    x = Math.floor(x / boxSize) * boxSize + halfBoxOffsetX;
     y = Math.floor(y / boxSize) * boxSize + halfBoxOffsetY;
 
     // ****************************************************************

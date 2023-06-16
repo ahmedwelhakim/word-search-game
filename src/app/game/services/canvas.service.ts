@@ -1,12 +1,10 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CanvasService {
   private renderer: Renderer2;
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
+  readonly canvas: HTMLCanvasElement;
+  readonly ctx: CanvasRenderingContext2D;
 
   constructor(private rendererFactory: RendererFactory2) {
     this.renderer = this.rendererFactory.createRenderer(null, null);

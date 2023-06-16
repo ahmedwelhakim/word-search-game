@@ -4,35 +4,45 @@
 //          S
 //        (90)
 
-import { Angle } from './angle.model';
+import {Angle} from './angle.model';
+import {Point} from "./point.model";
+
+export type DirectionVal = 270 | 0 | 90 | 180 | 315 | 225 | 45 | 135;
 
 export class Direction {
-  static get N() {
+  static get N(): 270 {
     return 270;
   }
-  static get E() {
+
+  static get E(): 0 {
     return 0;
   }
-  static get S() {
+
+  static get S() : 90 {
     return 90;
   }
-  static get W() {
+
+  static get W() : 180 {
     return 180;
   }
-  static get NE() {
+
+  static get NE(): 315 {
     return 315;
   }
-  static get NW() {
+
+  static get NW(): 225 {
     return 225;
   }
-  static get SE() {
+
+  static get SE():45 {
     return 45;
   }
-  static get SW() {
+
+  static get SW():135 {
     return 135;
   }
 
-  static calcSnappedAngle(angle: Angle): number {
+  static calcSnappedAngle(angle: Angle): DirectionVal {
     if (
       angle.degreeAngle >= Direction.NE + 45 / 2 ||
       angle.degreeAngle <= Direction.SE - 45 / 2
@@ -82,9 +92,14 @@ export class Direction {
       return Direction.SE;
 
     // It should never reach here
-    throw new Error('Invalid angle');
+    throw new Error(`Invalid angle ${angle.radianAngle}`);
   }
-  static get directions() {
+
+  static getDirection(startPoint: Point, endPoint: Point): DirectionVal {
+    const angle = Angle.angle(startPoint, endPoint);
+    return Direction.calcSnappedAngle(angle);
+  }
+  static get directions(): DirectionVal[] {
     return [
       Direction.E,
       Direction.W,
@@ -95,9 +110,10 @@ export class Direction {
       Direction.SE,
     ];
   }
-  static get randomDirection() {
+
+  static get randomDirection(): DirectionVal {
     return Direction.directions[
       Math.floor(Math.random() * Direction.directions.length)
-    ];
+      ];
   }
 }

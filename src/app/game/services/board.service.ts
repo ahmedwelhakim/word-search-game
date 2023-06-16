@@ -1,13 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Angle } from '../models/angle.model';
-import { Direction } from '../models/directions.model';
-import { Letter } from '../models/letter.model';
-import { Point } from '../models/point.model';
-import { CanvasService } from './canvas.service';
+import {Injectable} from '@angular/core';
+import {Angle} from '../models/angle.model';
+import {Direction, DirectionVal} from '../models/directions.model';
+import {Letter} from '../models/letter.model';
+import {Point} from '../models/point.model';
+import {CanvasService} from './canvas.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class BoardService {
   ctx: CanvasRenderingContext2D;
   letterVals: string[][] = [];
@@ -21,6 +19,7 @@ export class BoardService {
   constructor(private canvasService: CanvasService) {
     this.ctx = this.canvasService.ctx;
   }
+
   private initLetterVals(rows: number, cols: number) {
     // Fill the board with random letters
     this.letterVals = [];
@@ -32,6 +31,7 @@ export class BoardService {
       }
     }
   }
+
   private initLetter(rows: number, cols: number) {
     this.letters = [];
 
@@ -44,18 +44,20 @@ export class BoardService {
       }
     }
   }
-  fillBoard(rows: number, cols: number, ...words: string[]) {
+
+  fillBoard(rows: number, cols: number, words: string[]) {
     this.initLetterVals(rows, cols);
     this.initLetter(rows, cols);
 
     for (let word of words) {
       const randDir = Direction.randomDirection;
-      const [startI, startJ] = this.getValidRandomBeginingIndex(word, randDir);
+      const [startI, startJ] = this.getValidRandomBeginningIndex(word, randDir);
       this.fillWord(word, startI, startJ, randDir);
     }
     this.updateLettersAndSizes();
   }
-  private fillWord(word: string, i: number, j: number, dir: number) {
+
+  private fillWord(word: string, i: number, j: number, dir: DirectionVal) {
     const len = word.length;
     const wordLettersReversed = word.split('').reverse();
     this.doInDirection(dir, i, j, len, (i, j) => {
@@ -65,9 +67,10 @@ export class BoardService {
       this.usedLetterIndexesMap.set(`${i},${j}`, letter);
     });
   }
-  private getValidRandomBeginingIndex(
+
+  private getValidRandomBeginningIndex(
     word: string,
-    direction: number
+    direction: DirectionVal
   ): [number, number] {
     let randI = Math.floor(Math.random() * this.rows);
     let randJ = Math.floor(Math.random() * this.cols);
@@ -77,7 +80,8 @@ export class BoardService {
     }
     return [randI, randJ];
   }
-  private isValidIndex(i: number, j: number, word: string, direction: number) {
+
+  private isValidIndex(i: number, j: number, word: string, direction: DirectionVal) {
     const len = word.length;
     const max_cols = this.cols;
     const max_rows = this.rows;
@@ -108,7 +112,7 @@ export class BoardService {
         result = i <= max_rows - len && j >= len - 1;
         break;
     }
-    if (result === false) return false;
+    if (!result) return false;
 
     // Handle the case if letter will override other valid word letter
     this.doInDirection(direction, i, j, len, (i2, j2, counter) => {
@@ -121,6 +125,7 @@ export class BoardService {
     });
     return result;
   }
+
   draw() {
     this.ctx.beginPath();
     for (let row of this.letters) {
@@ -129,6 +134,7 @@ export class BoardService {
       }
     }
   }
+
   updateLettersAndSizes() {
     const width = this.canvasService.canvas.width / this.cols;
     const height = this.canvasService.canvas.height / this.rows;
@@ -150,6 +156,7 @@ export class BoardService {
       }
     }
   }
+
   private translatePointToIndices(point: Point): [number, number] {
     // Remove all offsets
     let offsetX = -this.boxSize / 2;
@@ -179,9 +186,7 @@ export class BoardService {
     const [i1, j1] = this.translatePointToIndices(startPoint);
     const [i2, j2] = this.translatePointToIndices(endPoint);
 
-    const direction = Direction.calcSnappedAngle(
-      Angle.angle(startPoint, endPoint)
-    );
+    const direction = Direction.getDirection(startPoint, endPoint);
     let res: string[] = [];
     const distanceLength = Math.max(Math.abs(i2 - i1), Math.abs(j2 - j1)) + 1;
     if (i1 === i2 && j1 === j2) return this.letterVals?.[i1]?.[j1] || '';
@@ -192,8 +197,8 @@ export class BoardService {
     return res.join('');
   }
 
-  private doInDirection<T extends any>(
-    direction: number,
+  doInDirection<T extends any>(
+    direction: DirectionVal,
     startI: number,
     startJ: number,
     len: number,
@@ -275,9 +280,11 @@ export class BoardService {
     }
     return res;
   }
+
   get offsetX() {
     return this._offsetX;
   }
+
   get offsetY() {
     return this._offsetY;
   }
@@ -285,21 +292,27 @@ export class BoardService {
   get boxSize() {
     return this._boxSize;
   }
+
   get rows() {
     return this.letterVals.length;
   }
+
   get cols() {
     return this.letterVals?.[0]?.length || 0;
   }
+
   get topLeftPoint() {
     return Point.from(this.offsetX, this.offsetY);
   }
+
   get topRightPoint() {
     return Point.from(this.offsetX + this.boxSize * this.cols, this.offsetY);
   }
+
   get bottomLeftPoint() {
     return Point.from(this.offsetX, this.offsetY + this.boxSize * this.rows);
   }
+
   get bottomRightPoint() {
     return Point.from(
       this.offsetX + this.boxSize * this.cols,
