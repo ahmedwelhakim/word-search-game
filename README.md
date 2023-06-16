@@ -1,5 +1,9 @@
 # WordMatcher
 
+ - ### link to the game: [Here](https://ahmedwelhakim.github.io/word-search-game/)
+
+---
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.2.
 
 ## Development server
