@@ -7,7 +7,9 @@ import { GameComponent } from './game/game.component';
 @NgModule({
   declarations: [AppComponent, GameComponent],
   imports: [BrowserModule],
-  providers: [],
+  providers:   [
+    { provide: 'Window',  useValue: window }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   OnDestroy,
   Renderer2,
@@ -19,10 +20,11 @@ export class InputHandlerService implements OnDestroy {
   private _pressed$ = new BehaviorSubject<boolean>(false);
   private readonly unlisitners: (() => void)[] = [];
   private renderer: Renderer2;
+
   constructor(
     private canvasService: CanvasService,
     private boardService: BoardService,
-    private rendererFactory: RendererFactory2
+    private rendererFactory: RendererFactory2,
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
     this.canvas = this.canvasService.canvas;
@@ -176,11 +178,11 @@ export class InputHandlerService implements OnDestroy {
   private getPointFromEvent(event: MouseEvent | TouchEvent) {
     let offsetX = 0;
     let offsetY = 0;
-    if (event instanceof MouseEvent) {
+    if ('MouseEvent' in window && event instanceof MouseEvent) {
       offsetX = event.offsetX;
       offsetY = event.offsetY;
     }
-    if (event instanceof TouchEvent) {
+    if ( 'TouchEvent' in window && event instanceof TouchEvent) {
       const boundRect = this.canvas.getBoundingClientRect();
       offsetX = event.touches[0].clientX - boundRect.left;
       offsetY = event.touches[0].clientY - boundRect.top;
